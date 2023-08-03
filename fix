@@ -1,0 +1,25 @@
+
+o resolve this issue, you have a few options:
+
+Change Execution Policy (Temporary Solution):
+You can change the PowerShell execution policy for the current session to allow script execution. Open PowerShell as an administrator and run the following command:
+
+powershell
+Copy code
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
+After running this command, try using nodemon again in the same PowerShell session.
+
+Change Execution Policy (Permanent Solution):
+If you want to permanently change the execution policy for your user account, you can run the following command in an elevated PowerShell session (Run as Administrator):
+
+powershell
+Copy code
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope CurrentUser
+This will allow script execution for your user account only.
+
+Use cmd or another terminal:
+If you prefer not to change the PowerShell execution policy, you can use the Command Prompt (cmd) or another terminal that doesn't have the same restrictions. Nodemon should work fine in the Command Prompt.
+
+Please note that changing the execution policy to "Bypass" can pose security risks, as it allows any script to run without restrictions. It's generally recommended to change it back to a more restrictive policy after you've finished using nodemon or other trusted scripts.
+
+Remember that whichever method you choose, you may need to restart your terminal or PowerShell session for the changes to take effect.
