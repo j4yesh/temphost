@@ -1,70 +1,56 @@
 #include <stdio.h>
-#include<sys/types.h>
-#include<unistd.h>
-#include<string.h>
-#define MAX 20
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
 
-int a[1000];
-
-void quick_sort(int low, int high){
-	int i,j,pivot,temp;
-	if(low<high){
-		pivot=low;
-		i=low;
-		j=high;
-		while(i<j){
-			while(a[i]<=a[pivot] && i<high){
-				i++;
-			}
-			while(a[j]>a[pivot]){
-				j--;	
-			}
-			if(i<j){
-			temp=a[i];
-			a[i]=a[j];
-			a[j]=temp;
-			}
-		}
-		temp=a[pivot];
-		a[pivot]=a[j];
-		a[j]=temp;
-		quick_sort(low,j-1);
-		quick_sort(j+1,high);
-	}
+void bubbleSort(int arr[], int n) {
+    int temp;
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                // Swap arr[j] and arr[j+1]
+                temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
 }
 
-int main(){
-int i,n,ele,pid;
-char *str1[MAX];
-char str[5];
+int main() {
+    int arr[] = {12, 11, 10, 5, 6};
 
-printf("Enter size of Elements: ");
-scanf("%d",&n);
-printf("Enter %d Elements: ",n);
-for(i=0;i<n;i++){
-scanf("%d",&a[i]);
-}
+    int n = sizeof(arr) / sizeof(arr[0]);
 
-pid = fork();
-if(pid<0){
-printf("Error while creating new process...!!!");
-}
-else if(pid>0){
-quick_sort(0,n);
-printf("\nAfter sorting:\t");
-for(i=1;i<=n;i++){
-printf("%d ",a[i]);
-}
-printf("\n");
-for(i=0;i<=MAX;i++){
-str1[i]=NULL;
-}
-for(i=1;i<=n;i++){
-sprintf(str,"%d",a[i]);
-str1[i-1]=strdup(str);
-}
+    int pid;
+    pid = fork();
 
-execve("./Reverse",str1,NULL);
-printf("EXECVE not called..!!!");
-}
+    if (pid == 0) {
+        // Child process
+        char *args[n + 2];
+        args[0] = "./display_reverse";
+        args[n + 1] = NULL;
+
+        for (int i = 0; i < n; i++) {
+            args[i + 1] = (char *)malloc(20);
+            sprintf(args[i + 1], "%d", arr[i]);
+        }
+
+        execve(args[0], args, NULL);
+    } else {
+        // Parent process
+        wait(NULL);
+
+        // Sort the array
+        bubbleSort(arr, n);
+
+        // Display the sorted array
+        printf("Sorted Array: ");
+        for (int i = 0; i < n; i++) {
+            printf("%d ", arr[i]);
+        }
+        printf("\n");
+    }
+
+    return 0;
 }
