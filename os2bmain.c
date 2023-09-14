@@ -18,9 +18,17 @@ void bubbleSort(int arr[], int n) {
 }
 
 int main() {
-    int arr[] = {12, 11, 10, 5, 6};
+    int n;
+    printf("Enter the number of elements in the array: ");
+    scanf("%d", &n);
 
-    int n = sizeof(arr) / sizeof(arr[0]);
+    int arr[n];
+
+    printf("Enter %d elements:\n", n);
+    for (int i = 0; i < n; i++) {
+        printf("Element %d: ", i + 1);
+        scanf("%d", &arr[i]);
+    }
 
     int pid;
     pid = fork();
